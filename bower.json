@@ -1,0 +1,30 @@
+{
+  "name": "zero-pages",
+  "version": "0.1",
+  "authors": [
+    "Jason Lee"
+  ],
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer",
+    "web-animations",
+    "iron-pages",
+    "neon-animation",
+    "neon-animated-pages"
+  ],
+  "main": [
+    "zero-pages.html"
+  ],
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zerodevx/zero-pages.git"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/zerodevx/zero-pages",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "neon-animation": "PolymerElements/neon-animation#^1.0.1"
+  }
+}
