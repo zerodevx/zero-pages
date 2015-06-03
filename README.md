@@ -26,8 +26,9 @@ Change pages programatically with fade effect (default) by calling `this.$.pages
 Example usage with sugar:
 
 ```html
-<!-- Since initial-selection is not defined, nothing will be loaded until the first "changePage(page-id)"
-     is called. The animate-initial-selection attribute animates the first page. -->
+<!-- Since initial-selection is not defined, nothing will be loaded until the first 
+     "changePage(page-id)" is called. The animate-initial-selection attribute tells
+     <zero-pages> to animate the first page. -->
 <zero-pages id="pages" animate-initial-selection>
 
   <!-- Main Page (This gets loaded in DOM when the first "changePage" is called,
@@ -84,7 +85,7 @@ If you are (like me) concerned about the DOM, `<zero-pages>` allows succinct, de
 
 ## Methods
 
-Change pages imperatively by calling `changePage(*pageId*)` on the <zero-pages> node.
+Change pages imperatively by calling `changePage(*pageId*)` on the `<zero-pages>` node.
 
 ## To-Do
 
@@ -92,5 +93,5 @@ Expose a `transition` attribute on `<zero-pages>` allowing selection of transiti
 
 ## Version History
 
-2015-06-03: v0.1
+1. 2015-06-03: v0.1
 
