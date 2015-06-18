@@ -14,57 +14,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 
 <!--
-Version: 0.1
+v0.2
+# `<zero-pages>`
+A better pages element for Polymer 1.0 wrapping Polymer Elements' neon-animated-pages.
 
-`zero-pages` manages a set of pages and runs 'fade' transitions when switching between them. Its children
-should use `zero-page` with a `page-id` attribute set to a unique string.
-
-`zero-pages` wraps `neon-animated-pages` with lots of added sugar. It allows succinct, declarative control
-on what gets loaded, how it's loaded, and what's not.
-
-Most Basic Example Usage:
-
-    <zero-pages id="pages" initial-selection="page1" animate-initial-selection>
-
-      <zero-page page-id="page1">
-        <div>This is Page One.</div>
-      </zero-page>
-
-      <zero-page page-id="page2">
-        <div>This is Page Two.</div>
-      </zero-page>
-
-    </zero-pages>
-
-## Published Attributes
-
-`<zero-pages>`
-
-| Property                  | Description                                                |
-|---------------------------|------------------------------------------------------------|
-| `initialSelection`        | *String*. Display the initial page immediately on load.    |
-| `animateInitialSelection` | *Boolean*. When true, animates the first page when shown.  |
-| `transition`              | *String*. Defines the transition between pages. ***TODO*** |
-
-`<zero-page>`
-
-| Property            | Description |
-|---------------------|-------------|
-| `pageId`            | *String*. Compulsory to set a unique identifier for that page. |
-| `unveilOnPageReady` | *Boolean*. When true, the actual page change occurs only after a `page-ready` event is received from its children. Remember to fire a `page-ready` event on children pages! |
-| `isParentOf`        | *String*. Space delimited string of `page-id`s to ensure that this page is kept in DOM when its "children" are shown. Set to `*` if you want this page to be in DOM at all times. |
-| `delayOnDetach`     | *Number*. Delay in ms when detaching the old page after the new page is called. Defaults to 500ms. |
-
-## Additional Notes
-1. Remember, if `unveilOnPageReady` is asserted, children pages must fire a `page-ready` event to tell `<zero-pages> when
-   it's ok to actually change the page.
-
+Refer to README.MD for API definitions and usage examples.
+@zerodevx
 -->
 
 <dom-module id="zero-page">
   <template>
     <template is="dom-if" if="[[_pageShouldLoad]]" restamp>
-      <div on-page-ready="_pageReadyReceived"><content></content></div>
+      <div on-zero-page-ready="_pageReadyReceived"><content></content></div>
     </template>
   </template>
 </dom-module>
@@ -80,7 +41,11 @@ Most Basic Example Usage:
     }
   </style>
   <template>
-    <neon-animated-pages id="pages" attr-for-selected="pageId" animate-initial-selection$="[[animateInitialSelection]]" entry-animation="[[_entryAnimation]]" exit-animation="[[_exitAnimation]]" on-zero-page-unveil="_changePage" on-neon-animation-finish="_beginDetachAll">
+    <neon-animated-pages id="pages" attr-for-selected="pageId" animate-initial-selection$="[[animateInitialSelection]]"
+                         entry-animation="[[_entryAnimation]]" exit-animation="[[_exitAnimation]]"
+                         on-zero-page-unveil="_changePage"
+                         on-neon-animation-finish="_beginDetachAll"
+                         on-zero-change-page="_pageChangeReceived">
       <content id="content"></content>
     </neon-animated-pages>
   </template>
@@ -179,14 +144,24 @@ Most Basic Example Usage:
         _entryAnimation: { type: String, value: "fade-in-animation" },
         _exitAnimation: { type: String, value: "fade-out-animation" },
         _selected: { type: String, value: "" },
-        _curPage: { type: String, value: "", observer: "_curPageChanged" }
+        _curPage: { type: String, value: "", observer: "_curPageChanged" },
+        _pageList: { type: Array, value: function () { return []; } }
       },
       ready: function () {
-        // apply transition settings here
-        //if (this.transition === "fade") {}
+        // construct _pageList
+        var p = this.querySelectorAll("zero-page");
+        for (var a = 0; a < p.length; a++) {
+          this._pageList.push(p[a].getAttribute("page-id"));
+        }
+        // TODO: configure transition here
       },
       attached: function () {
         if (this.initialSelection) { this.changePage(this.initialSelection); }
+      },
+      _pageChangeReceived: function (e) {
+        if (e.detail.pageId) {
+          this.changePage(e.detail.pageId);
+        }
       },
       _curPageChanged: function () { //notify children zero-page of new _curPage
         var cp = this._curPage;
@@ -205,9 +180,13 @@ Most Basic Example Usage:
         });
       },
       changePage: function (p) {
-        if (!p) return this._curPage;
+        if (!p) return;
+        if (this._pageList.indexOf(p) === -1) {
+          console.warn("zero-pages: unknown page-id:", p);
+          return;
+        }
         this._curPage = p;
-      }
+      },
     });
 
   })();

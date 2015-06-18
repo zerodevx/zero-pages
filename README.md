@@ -1,7 +1,8 @@
-# zero-pages
+v0.2
+# `<zero-pages>`
 A better pages element for Polymer 1.0 wrapping Polymer Elements' neon-animated-pages.
 
-## Right to the money
+### Right to the money
 
 Example usage:
 
@@ -21,7 +22,10 @@ Example usage:
 </zero-pages>
 ```
 
-Change pages programatically with fade effect (default) by calling `this.$.pages.changePage("page2")`.
+Change pages programatically with fade effect (default) by either:
+
+1. Calling `this.$.pages.changePage("page2")` in the parent.
+2. Firing `this.fire("zero-change-page", {pageId: "page2"}` event from your child page.
 
 Example usage with sugar:
 
@@ -64,7 +68,7 @@ Example usage with sugar:
 
 If you are (like me) concerned about the DOM, `<zero-pages>` allows succinct, declarative control of what gets loaded, how it's loaded, and what's not.
 
-## Published Attributes
+### Published Attributes
 
 `<zero-pages>`
 
@@ -76,23 +80,44 @@ If you are (like me) concerned about the DOM, `<zero-pages>` allows succinct, de
 
 `<zero-page>`
 
-| Property            | Description |
-|---------------------|-------------|
-| `pageId`            | *String*. Compulsory to set a unique identifier for that page. |
-| `unveilOnPageReady` | *Boolean*. When true, the actual page change occurs only after a `page-ready` event is received from its children. Remember to fire a `page-ready` event on children pages! |
-| `isParentOf`        | *String*. Space delimited string of `page-id`s to ensure that this page is kept in DOM when its "children" are shown. Set to `*` if you want this page to be in DOM at all times. |
-| `delayOnDetach`     | *Number*. Delay in ms when detaching the old page after the new page is called. Defaults to 500ms. |
+| Property            | Type    | Description                                            |
+|---------------------|---------|--------------------------------------------------------|
+| `pageId`            | String  | Compulsory to set a unique identifier for that page.   |
+| `unveilOnPageReady` | Boolean | When true, the actual page change occurs only after a `page-ready` event is received from its child page. |
+| `isParentOf`        | String  | Space delimited string of `page-id`s to ensure that this page is kept in DOM when its "children" are shown. Set to `*` if you want this page to be in DOM at all times. |
+| `delayOnDetach`     | Number  | Delay in ms when detaching the old page after the new page is called. Defaults to 500ms. |
 
-## Methods
+### Public Methods
 
-Change pages imperatively by calling `changePage(*pageId*)` on the `<zero-pages>` node.
+`<zero-pages>`
 
-## To-Do
+| Function             | Parameters           | Description                              |
+|----------------------|----------------------|------------------------------------------|
+| `changePage(pageId)` | *pageId* as *String* | Actually begin the change page process from current page to `pageId`. |
+
+### Events
+
+| Event              | Description                                                       |
+|--------------------|-------------------------------------------------------------------|
+| `zero-page-ready`  | If a `zero-page` is set to `unveilOnPageReady`, your child page must fire a `zero-page-ready` event. This notifies `<zero-pages>` to actually change the page |
+| `zero-change-page` | On child pages, firing a `zero-change-page` event will notify `<zero-pages>` to begin the `changePage` method on `event.detail.pageId`. For example, calling a `this.fire("zero-change-page", {pageId: "page2"});` will immediately change the current page to `page2`. |
+
+### Convenience Properties
+
+`<zero-pages>`
+
+| Property    | Type   | Description                                                     |
+|-------------|--------|-----------------------------------------------------------------|
+| `_curpage`  | String | Contains `pageId` of the current page.                          |
+| `_pageList` | Array  | Contains array of valid `pageId`s that were declared.           |
+
+### To-Do
 
 1. Expose a `transition` attribute on `<zero-pages>` allowing selection of transition type between pages.
 2. Add Demo.
 
-## Version History
+### Version History
 
-1. 2015-06-03: v0.1
+1. 2015-06-03: v0.1 - first commit
+2. 2015-06-18: v0.2 - renamed `page-ready` event to `zero-page-ready`, add `zero-change-page` feature, add `_pageList` convenience property.
 

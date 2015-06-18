@@ -1,6 +1,6 @@
 {
   "name": "zero-pages",
-  "version": "0.1",
+  "version": "0.2",
   "authors": [
     "Jason Lee"
   ],
@@ -22,7 +22,7 @@
     "url": "git://github.com/zerodevx/zero-pages.git"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/zerodevx/zero-pages",
+  "homepage": "http://www.zerodevx.com",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
     "neon-animation": "PolymerElements/neon-animation#^1.0.1"
